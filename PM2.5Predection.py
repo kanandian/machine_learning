@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import array
 import csv
+from sympy import *
 
 
 def prehand_data(data):
@@ -34,31 +36,40 @@ def prehand_data(data):
 
     return res
 
-def main():
-    # 参数
-    p_amb_temp = 10
-    p_ch4 = 10
-    p_co = 10
-    p_nmhc = 10
-    p_no = 10
-    p_no2 = 10
-    p_nox = 10
-    p_o3 = 10
-    p_pm10 = 10
-    p_pm25 = 10
-    p_rainfall = 10
-    p_rh = 10
-    p_so2 = 10
-    p_thc = 10
-    p_wd_hr = 10
-    p_wind_dirc = 10
-    p_wind_speed = 10
-    p_ws_hr = 10
+def train(train_data):
+    # 初始参数
+    p_amb_temp = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_ch4 = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_co = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_nmhc = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_no = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_no2 = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_nox = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_o3 = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_pm10 = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_pm25 = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_rainfall = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_rh = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_so2 = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_thc = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_wd_hr = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_wind_dirc = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_wind_speed = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
+    p_ws_hr = [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0]
 
     # settings
     iteration = 300000
-    lr = 0.0001
+    lr = 1
 
+    y_index = 9
+    for i in range(iteration):
+        while (y_index < len(train_data)):
+            # b_grad = b_grad-
+            pass
+
+
+
+def main():
     train_data = []
 
     with open('PM2.5_DATA/train.csv', 'r') as f:
@@ -69,6 +80,7 @@ def main():
 
     train_data = prehand_data(train_data)
     print(train_data[len(train_data)-1])
+    print(len(train_data))
 
 
 
