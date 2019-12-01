@@ -4,21 +4,34 @@ import csv
 
 
 def prehand_data(data):
-    res = {}
+    res = []
+    timepoint = {}
+    temp = []
     pre_key = 0
     for item in data:
         key = item.get('日期')
         if pre_key == 0:
             pre_key = key
-            dict = []
         if key == pre_key:
-            dict.append(item)
+            temp.append(item)
         else:
-            res[pre_key] = dict
-            dict = []
+            for h in range(24):
+                for i in range(len(temp)):
+                    p_key = temp[i].get('测项')
+                    p_value = temp[i].get(str(h))
+                    timepoint[p_key] = p_value
+                res.append(timepoint)
+
             pre_key = key
-            dict.append(item)
-    res[key] = dict
+            temp = []
+            temp.append(item)
+    for h in range(24):
+        for i in range(len(temp)):
+            p_key = temp[i].get('测项')
+            p_value = temp[i].get(str(h))
+            timepoint[p_key] = p_value
+        res.append(timepoint)
+
     return res
 
 def main():
@@ -55,7 +68,9 @@ def main():
             train_data.append(dict)
 
     train_data = prehand_data(train_data)
-    print(train_data['2014/1/1'])
+    print(train_data[len(train_data)-1])
+
+
 
 
     # for item in train_data:
@@ -68,3 +83,24 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+class Paras():
+    def __init__(self):
+        self.amb_temp = 10
+        self.ch4 = 10
+        self.co = 10
+        self.nmhc = 10
+        self.no = 10
+        self.no2 = 10
+        self.nox = 10
+        self.o3 = 10
+        self.pm10 = 10
+        self.pm25 = 10
+        self.rainfall = 10
+        self.rh = 10
+        self.so2 = 10
+        self.thc = 10
+        self.wd_hr = 10
+        self.wind_dirc = 10
+        self.wind_speed = 10
+        self.ws_hr = 10
