@@ -16,6 +16,8 @@ def prehand_data(data):
         else:
             res[pre_key] = dict
             dict = []
+            pre_key = key
+            dict.append(item)
     res[key] = dict
     return res
 
@@ -54,7 +56,7 @@ def main():
 
     train_data = prehand_data(train_data)
     print(train_data['2014/1/1'])
-    print(type(train_data['2014/1/1']))
+
 
     # for item in train_data:
     #     print(item)
