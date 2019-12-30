@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 array = np.array([[1, 2, 3], [4, 5, 6]])
 zeros = np.zeros((10, 10), dtype=float)
@@ -44,7 +45,67 @@ print(a.flatten())
     ndarray 合并
 """
 
-print(np.vstack((a, b)))    #上下合并
-print(np.hstack((a, b)))    #左右合并
+# print(np.vstack((a, b)))    #上下合并
+# print(np.hstack((a, b)))    #左右合并
+#或使用
+# print(np.concatenate(a,b,a), axis=0)
+print(a[:,np.newaxis])  #新增一个维度 可用reshape实现
 
+
+"""adarray 分割"""
+print(np.split(a, 2, axis=1))   #等项分割 分成两个ndarray
+#也可以用np.vsplit np.hsplit
+print(np.array_split(a,3,axis=1))   #不等项分割
+
+
+"""赋值 复制"""
+b = a
+print(a is b)   #True
+b = a.copy()    #deep copy
+print(a is b)   #False
+
+
+"""pandas"""
+s = pd.Series([1,2,3,4,5,np.nan,6,7])
+dates = pd.date_range('20200101', periods=6)
+df = pd.DataFrame(np.random.randn(6,4), index=dates, columns=['a','b','c','d'])
+print(df.dtypes, df.index, df.columns, df.values)
+print(df.describe())
+df.sort_index(axis=1, ascending=False)  #对index进行排序
+df.sort_values(by='a')
+
+"""选择数据"""
+print(df['a'])  #df.a 效果相同
+print(df[0:3])
+print(df['20200101':'20200104'])
+#select by label
+print(df.loc['20200101', ['a','b']])
+#select by position
+print(df.iloc[[1,2,4],0:2])
+#mixed selection
+# print(df.ix[])    #被弃用
+print(df[df.a>0])
+
+
+"""赋值 直接赋值"""
+df.a[df.b<0] = 0
+df['e'] = 0 #新增一列
+df['e'] = pd.Series([1,2,3,4,5,6], index=pd.date_range('20200101', periods=6)) #新增一列 不能缺少index
+
+
+"""丢失数据处理NaN"""
+df.iloc[0,1] = np.nan
+df.iloc[1,2] = np.nan
+print(df.dropna(axis=0,how='any'))  #how={'any', 'all'} 默认any
+print(df.fillna(value=0))
+print(df.isnull())
+print(np.any(df.isnull())==True)
+
+
+"""导入导出(读入写出)"""
+data = pd.read_csv('PM2.5Predection/PM2.5_DATA/train.csv')
+data.to_pickle('train.pickle')
+
+
+"""合并"""
 
