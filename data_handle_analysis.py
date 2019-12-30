@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 array = np.array([[1, 2, 3], [4, 5, 6]])
 zeros = np.zeros((10, 10), dtype=float)
@@ -108,4 +109,38 @@ data.to_pickle('train.pickle')
 
 
 """合并"""
+# res = pd.concat([df1, df2, df3], axis=0, ignore_index=True, join='inner') #join={'outer', 'inner'} 默认outer
+# res = pd.concat([df1, df2, df3], axis=0, ignore_index=True, join_axes=[df1.index])
+# res = pd1.append(df2, ignore_index=True)
+# res = pd1.append([df2, df3], ignore_index=True)
+# s1 = pd.Series([1,2,3,4], index=['a','b','c','d'])
+# res.dp.append(s1, ignore_index=True)
+
+
+# res = pd.merge(pd1, pd2, on='key', indicator=True)
+# res = pd.merge(pd1, pd2, on=['key1', 'key2' how='inner'], indicator='indicator_column') #默认inner how=['left', 'right', 'outer', 'inner']
+# res = pd.merge(pd1, pd2, pd1_index=True, pd2_index=True, how='outer') #通过index merge
+# res = pd.merge(pd1, pd2, on='key', suffixes=['_pd1', '_pd2'], how='inner') #用于分辨不同表中意义不同的同名属性
+
+
+"""数据可视化"""
+#series
+data = pd.Series(np.random.randn(1000), index=np.arange(1000))
+data = data.cumsum()
+# data.plot()
+# plt.show()
+
+#data_frame
+data = pd.DataFrame(np.random.randn(1000, 4), index=np.arange(1000), columns=list("ABCD"))
+data = data.cumsum()
+# data.plot()
+# plt.show()
+
+"""
+    plot methods:
+    'bar', 'hist', 'box', 'kde', 'area', 'scatter', 'hexbin', 'pie'
+"""
+class1 = data.plot.scatter(x='A', y='B', color='DarkBlue', label='class1')
+class1 = data.plot.scatter(x='A', y='C', color='DarkGreen', label='class2', ax=class1)
+plt.show()
 
