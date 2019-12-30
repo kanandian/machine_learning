@@ -72,7 +72,7 @@ def train(train_data):
 def main():
     train_data = []
 
-    with open('PM2.5_DATA/train.csv', 'r') as f:
+    with open('PM2.5Predection/PM2.5_DATA/train.csv', 'r') as f:
         dict_reader = csv.DictReader(f)
 
         for dict in dict_reader:
