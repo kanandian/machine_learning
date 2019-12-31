@@ -151,11 +151,49 @@ def data_show():    #matplotlib
     y1 = 2*x+1
     y2 = x**2
     y3 = 3*x
-    plt.figure()    #第一个figure
-    plt.plot(x, y1)
+    # plt.figure()    #第一个figure
+    # plt.plot(x, y1)
     plt.figure(num=3, figsize=(8, 5))   #第二个figure
-    plt.plot(x, y2)
-    plt.plot(x, y3, color='red', linewidth=1.0, linestyle='--')
+    l1, = plt.plot(x, y2, label='up')
+    l2, = plt.plot(x, y3, color='red', linewidth=1.0, linestyle='--', label='down')
+
+    #坐标轴
+    plt.xlim((-1, 2))
+    plt.ylim((-2, 3))
+    plt.xlabel('x')
+    plt.ylabel('y')
+
+    x_ticks = np.linspace(-1, 2, 5)
+    plt.yticks([-2, -1.8, -1, 1.22, 3], [r'$really\ bad\alpha$', r'$bad$', r'$normal$', r'$good$', r'$really\ good$'])
+    plt.xticks(x_ticks)
+
+    axis = plt.gca()    #get current axis
+    axis.spines['right'].set_color('none')
+    axis.spines['top'].set_color('none')
+    axis.xaxis.set_ticks_position('bottom') #默认底部线为x坐标轴
+    axis.yaxis.set_ticks_position('left')   #默认左边线为y坐标轴
+    axis.spines['bottom'].set_position(('data', 0)) #定位方式outward, axes
+    axis.spines['left'].set_position(('data', 0))
+
+
+    #图例 也可以事先指定label，然后直接调动plt.legend()不用参数
+    plt.legend(handles=[l1, l2,], labels=['aaa', 'bbb'])
+    plt.legend(handles=[l1,], labels=['aaa',])
+    # plt.legend()
+
+    #注解
+    x0 = 1
+    y0 = 3*x0
+    plt.scatter(x0, y0, s=50, color='b')    #s:size
+    plt.plot([x0, x0], [0, y0], 'k--', lw=2.5)  #k--:简写 表示黑色以及虚线;lw:line_width
+    #method1
+    plt.annotate(r'$3x=%s$'%y0, xy=(x0, y0), xycoords='data', xytext=(+30, -30), textcoords='offset points', fontsize=16, arrowprops=dict(arrowstyle='->', connectionstyle='arc3, rad=.2'))    #xy:注解定位;xycoords:xy的值以data为基准
+    #method2
+    # plt.text(-3.7, 3, r'$This\ is\ some\ text.\mu\ \sigma_i\ \alpha_t$', fontdict={'size':16, 'color':'g'})
+
+
+    #tick能见度
+
     plt.show()
 
 
