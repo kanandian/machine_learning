@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def f(x,y): #计算高度
     return (1-x/2+x**5+y**3)*np.exp(-x**2-y**2)
@@ -238,8 +239,21 @@ def data_show():    #matplotlib
 
     plt.clabel(C, inline=True, fontsize=10)
 
+    # # image
+    # plt.figure()
+    # a = np.linspace(0.3, 0.7, 9).reshape((3, 3))
+    # plt.imshow(a, interpolation='nearest', cmap='bone', origin='lower') #interpolation=[]显示效果;origin=['upper', 'lower']其中upper颜色反向
+    # plt.colorbar(shrink=0.9)
 
-    # image
+
+    # 3D数据
+    figure = plt.figure()
+    axis = Axes3D(figure)
+    X = np.arange(-4,4,0.25)
+    Y = np.arange(-4,4,0.25)
+    X,Y = np.meshgrid(X,Y)
+    R = np.sqrt(X**2, Y**2)
+    Z = np.sin(R)
 
 
     plt.show()
