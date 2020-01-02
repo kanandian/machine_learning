@@ -2,9 +2,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.gridspec as gridspec
+from matplotlib import animation
 
 def f(x,y): #计算高度
     return (1-x/2+x**5+y**3)*np.exp(-x**2-y**2)
+
 
 def data_handle():  #numpy and pandas
     array = np.array([[1, 2, 3], [4, 5, 6]])
@@ -150,6 +153,15 @@ def data_handle():  #numpy and pandas
     plt.show()
 
 
+def animate(i):
+    line.set_ydata(np.sin(x+i/10))
+    return line,
+
+def init():
+    line.set_ydata(np.sin(x))
+    return line,
+
+
 def data_show():    #matplotlib
     x = np.linspace(-3, 3, 50)
     y1 = 2*x+1
@@ -251,10 +263,103 @@ def data_show():    #matplotlib
     axis = Axes3D(figure)
     X = np.arange(-4,4,0.25)
     Y = np.arange(-4,4,0.25)
-    X,Y = np.meshgrid(X,Y)
-    R = np.sqrt(X**2, Y**2)
+    X, Y = np.meshgrid(X,Y)
+    R = np.sqrt(X**2+Y**2)
     Z = np.sin(R)
 
+    axis.plot_surface(X,Y,Z,rstride=1, cstride=1, cmap=plt.get_cmap('rainbow')) #rstride:row_stride:行跨度;cstride:column_stride;列跨度 分割线的紧凑程度
+    axis.contourf(X, Y, Z, zdir='z', offset=-2, cmap='rainbow')    #zdir:从哪个轴压下去
+    axis.set_zlim(-2, 2)
+
+    # subplot多合一
+    plt.figure()
+    plt.subplot(2,1,1)
+    plt.plot([0,1], [0,2])
+
+    plt.subplot(2,3,4)
+    plt.plot([0, 1], [0, 3])
+
+    plt.subplot(2, 3, 5)
+    plt.plot([0, 1], [0, 2])
+
+    plt.subplot(2, 3, 6)
+    plt.plot([0, 1], [0, 2])
+
+
+
+    # 分格显示(效果类似上节)
+    # # method1:subplot2grid
+    # plt.figure()
+    # axis1 = plt.subplot2grid((3,3), (0,0), colspan=3, rowspan=1)
+    # axis1.plot([1,2], [1,2])
+    # axis1.set_xlabel('x')   #设置xlabel 之前所有设置函数前面都要加上set 例:plt.xlim()->axis.set_xlim()
+    # axis1.set_ylabel('y')
+    # axis1.set_title('axis1_title')
+    # axis2 = plt.subplot2grid((3,3), (1,0), colspan=2)
+    # axis3 = plt.subplot2grid((3,3), (1,2), rowspan=2)
+    # axis4 = plt.subplot2grid((3,3), (2,0))
+    # axis5 = plt.subplot2grid((3,3), (2,1))
+
+
+    # method2:gridspec
+    plt.figure()
+    gs = gridspec.GridSpec(3,3)
+    axis1 = plt.subplot(gs[0,:])
+    axis2 = plt.subplot(gs[1,:2])
+    axis3 = plt.subplot(gs[1:,2])
+    axis4 = plt.subplot(gs[-1,0])
+    axis5 = plt.subplot(gs[2,1])
+
+
+    # method3:easy to define structure(subplots)
+    figure, ((ax11, ax12), (ax21, ax22)) = plt.subplots(2,2, sharex=True, sharey=True)
+    ax11.scatter([1,2], [1,2])
+
+
+    # 图中图
+    figure = plt.figure()
+    x = [1,2,3,4,5,6,7]
+    y = [1,3,4,2,5,8,6]
+
+    left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+    ax1 = figure.add_axes([left, bottom, width, height])
+    ax1.plot(x,y, 'r')
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('y')
+    left, bottom, width, height = 0.2, 0.6, 0.25, 0.25
+    ax2 = figure.add_axes([left, bottom, width, height])
+    ax2.plot(y,x, 'g')
+    ax2.set_xlabel('x')
+    ax2.set_ylabel('y')
+
+    left, bottom, width, height = 0.6, 0.2, 0.25, 0.25
+    plt.axes([left, bottom, width, height])
+    plt.plot(y[::-1], x, 'b')   #y[::-1]逆序
+    plt.xlabel('x')
+    plt.ylabel('y')
+
+
+    #主次坐标轴
+    x = np.arange(0,10,0.1)
+    y1 = 0.05*x**2
+    y2 = -1*y1
+
+    figure, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
+    ax1.plot(x,y1,'g-')
+    ax2.plot(x,y2,'b--')
+    ax1.set_xlabel('X')
+    ax1.set_ylabel('Y1')
+    ax2.set_ylabel('Y2')
+
+
+
+    # annimation
+    figure, ax = plt.subplots()
+    x = np.arange(0,2*np.pi, 0.01)
+    line, = ax.plot(x,np.sin(x))
+
+    ani = animation.FuncAnimation(fig=figure, func=animate, frames=100, init_func=init, interval=20, blit=False)
 
     plt.show()
 
