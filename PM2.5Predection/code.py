@@ -53,7 +53,7 @@ for i in range(18):
 	listTrainData.append([])
 
 # 將資料放進空間
-textTrain = open(os.path.join(os.path.dirname(__file__), "PM2.5Predection/PM2.5_DATA/train.csv"), "r", encoding="big5")
+textTrain = open(os.path.join(os.path.dirname(__file__), "PM2.5_DATA/train.csv"), "r", encoding="big5")
 rowTrain = csv.reader(textTrain)
 n_row = 0
 for r in rowTrain:
@@ -81,7 +81,7 @@ for m in range(12):
                 listTrainX[471*m + i].append(listTrainData[p][480*m + i + t])
 
 listTestData = []
-textTest = open(os.path.join(os.path.dirname(__file__), "PM2.5Predection/PM2.5_DATA/test.csv"), "r", encoding="big5")
+textTest = open(os.path.join(os.path.dirname(__file__), "PM2.5_DATA/test.csv"), "r", encoding="big5")
 rowTest = csv.reader(textTest)
 n_row = 0
 for r in rowTest:
