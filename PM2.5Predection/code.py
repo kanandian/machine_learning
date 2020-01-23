@@ -53,7 +53,7 @@ for i in range(18):
 	listTrainData.append([])
 
 # 將資料放進空間
-textTrain = open(os.path.join(os.path.dirname(__file__), "PM2.5_DATA/train.csv"), "r", encoding="big5")
+textTrain = open(os.path.join(os.path.dirname(__file__), "PM2.5_DATA/train.csv"), "r")
 rowTrain = csv.reader(textTrain)
 n_row = 0
 for r in rowTrain:
