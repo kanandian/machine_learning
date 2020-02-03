@@ -35,7 +35,7 @@ def data_handle():  #numpy and pandas
     print(np.clip(a, 3, 4)) #小于3的等于三，大于4的等于4
 
 
-    """
+    """ 
         ndarray可以向列表一样访问（使用下标）
     """
     print(a[2][1])
