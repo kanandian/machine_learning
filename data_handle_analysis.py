@@ -11,22 +11,32 @@ def f(x,y): #计算高度
 
 def data_handle():  #numpy and pandas
     array = np.array([[1, 2, 3], [4, 5, 6]])
+    # array.ndim    #几维数组
+    # array.size    #元素个数
+    # array.shape   #矩阵形状
     zeros = np.zeros((10, 10), dtype=float)
     random = np.random.random((2,4))
     a = np.arange(0, 12, 2).reshape((2, 3))
     b = np.linspace(1, 10, 6).reshape(2, 3)
+    # 基础运算
     c = b-a
     c = b+a
+    c = b ** 2
     c = a*b #逐个相乘
     # c = np.dot(a,b) #矩阵乘法 c = a.dot(b)
     c = 10*np.sin(a)
-    print(c<0)
+    print(c<0)  #返回一个boolean类型的矩阵
+    # print(c == 0) #返回一个boolean类型的矩阵
     sum = np.sum(random) #np.min(random)    np.max(random)
     sum = np.sum(random, axis=0)    #0:统计行 1:统计列
 
+    a = np.random.random((3, 4))
     a = np.random.randint(1, 5, size=(3, 4))
+    print(np.sum(a))    #总体求和
+    print(np.sum(a, axis=0))    #列求和,axis=1:行求和
     print(np.argmin(a)) #最小值的索引 np.argmax(a)
     print(a.mean()) #np.mean(a)一样
+    print(np.median(a)) #求中位数
     print(np.cumsum(a)) #累加 a(i+1)=a(i)+n(i)
     print(np.diff(a))   #累差a(i) = a(i+1)-a(i) shape:(m, n)->(m, n-1)
     print(np.nonzero)   #使用两个array表示非零值的索引，第一个array表示横坐标，第二个表示纵坐标
@@ -47,7 +57,9 @@ def data_handle():  #numpy and pandas
     for column in a.T: #迭代列
         print(column)
 
-    print(a.flatten())
+    print(a.flatten())  #a.flatten()返回一个被压平的array
+    for item in a.flat: #a.flat 迭代器
+        print(item)
 
 
     """
@@ -79,24 +91,28 @@ def data_handle():  #numpy and pandas
     dates = pd.date_range('20200101', periods=6)
     df = pd.DataFrame(np.random.randn(6,4), index=dates, columns=['a','b','c','d'])
     print(df.dtypes, df.index, df.columns, df.values)
-    print(df.describe())
+    print(df.describe())    #统计dataframe中所有数值的统计数据（如均值，方差等）
+    # df.T
     df.sort_index(axis=1, ascending=False)  #对index进行排序
     df.sort_values(by='a')
 
     """选择数据"""
     print(df['a'])  #df.a 效果相同
-    print(df[0:3])
+    print(df[0:3])  #选择行
     print(df['20200101':'20200104'])
     #select by label
     print(df.loc['20200101', ['a','b']])
     #select by position
+    print(df.iloc[3,1])
     print(df.iloc[[1,2,4],0:2])
     #mixed selection
-    # print(df.ix[])    #被弃用
+    # print(df.ix[])    #被弃用直接用loc
     print(df[df.a>0])
 
 
     """赋值 直接赋值"""
+    df.loc['20200101','b'] = 22
+    df[df.b<0] = 0
     df.a[df.b<0] = 0
     df['e'] = 0 #新增一列
     df['e'] = pd.Series([1,2,3,4,5,6], index=pd.date_range('20200101', periods=6)) #新增一列 不能缺少index
@@ -105,20 +121,20 @@ def data_handle():  #numpy and pandas
     """丢失数据处理NaN"""
     df.iloc[0,1] = np.nan
     df.iloc[1,2] = np.nan
-    print(df.dropna(axis=0,how='any'))  #how={'any', 'all'} 默认any
-    print(df.fillna(value=0))
-    print(df.isnull())
-    print(np.any(df.isnull())==True)
+    print(df.dropna(axis=0,how='any'))  #how={'any', 'all'} 默认any:行中任一个值为nan就把这行丢掉
+    print(df.fillna(value=0))   #将nan用0代替
+    print(df.isnull())  #返回一个boolean类型的列表
+    print(np.any(df.isnull()) == True)
 
 
     """导入导出(读入写出)"""
-    data = pd.read_csv('PM2.5Predection/PM2.5_DATA/train.csv')
+    data = pd.read_csv('PM2.5Predection/PM2.5_DATA/train.csv')  #也可以读用','分离数据的txt文件
     data.to_pickle('train.pickle')
 
 
     """合并"""
-    # res = pd.concat([df1, df2, df3], axis=0, ignore_index=True, join='inner') #join={'outer', 'inner'} 默认outer
-    # res = pd.concat([df1, df2, df3], axis=0, ignore_index=True, join_axes=[df1.index])
+    # res = pd.concat([df1, df2, df3], axis=0, ignore_index=True, join='inner') #join={'outer', 'inner'} 默认outer:不一样的用nan填充
+    # res = pd.concat([df1, df2, df3], axis=1, ignore_index=True, join_axes=[df1.index])    #join_axes指定在axis=1（左右合并）时考虑谁的index，相当于数据(左|右)外链接；默认左右左右都考虑
     # res = pd1.append(df2, ignore_index=True)
     # res = pd1.append([df2, df3], ignore_index=True)
     # s1 = pd.Series([1,2,3,4], index=['a','b','c','d'])
@@ -126,7 +142,7 @@ def data_handle():  #numpy and pandas
 
 
     # res = pd.merge(pd1, pd2, on='key', indicator=True)
-    # res = pd.merge(pd1, pd2, on=['key1', 'key2' how='inner'], indicator='indicator_column') #默认inner how=['left', 'right', 'outer', 'inner']
+    # res = pd.merge(pd1, pd2, on=['key1', 'key2'], how='inner' indicator='indicator_column') #默认inner how=['left', 'right', 'outer', 'inner']
     # res = pd.merge(pd1, pd2, pd1_index=True, pd2_index=True, how='outer') #通过index merge
     # res = pd.merge(pd1, pd2, on='key', suffixes=['_pd1', '_pd2'], how='inner') #用于分辨不同表中意义不同的同名属性
 
@@ -168,27 +184,28 @@ def data_show():    #matplotlib
     y2 = x**2
     y3 = 3*x
     # plt.figure()    #第一个figure
+    # plt.figure(num=3, figsize=(8, 5))
     # plt.plot(x, y1)
     plt.figure(num=3, figsize=(8, 5))   #第二个figure
     l1, = plt.plot(x, y2, label='up')
     l2, = plt.plot(x, y3, color='red', linewidth=1.0, linestyle='--', label='down')
 
     #坐标轴
-    plt.xlim((-1, 2))
+    plt.xlim((-1, 2))   #x轴取值范围
     plt.ylim((-2, 3))
-    plt.xlabel('x')
+    plt.xlabel('x') #x轴描述
     plt.ylabel('y')
 
     x_ticks = np.linspace(-1, 2, 5)
-    plt.yticks([-2, -1.8, -1, 1.22, 3], [r'$really\ bad\alpha$', r'$bad$', r'$normal$', r'$good$', r'$really\ good$'])
     plt.xticks(x_ticks)
+    plt.yticks([-2, -1.8, -1, 1.22, 3], [r'$really\ bad\alpha$', r'$bad$', r'$normal$', r'$good$', r'$really\ good$'])
 
     axis = plt.gca()    #get current axis
     axis.spines['right'].set_color('none')
     axis.spines['top'].set_color('none')
     # axis.xaxis.set_ticks_position('bottom') #默认底部线为x坐标轴
     # axis.yaxis.set_ticks_position('left ')   #默认左边线为y坐标轴
-    axis.spines['bottom'].set_position(('data', 0)) #定位方式outward, axes
+    axis.spines['bottom'].set_position(('data', 0)) #定位方式除了data还有outward, axes
     axis.spines['left'].set_position(('data', 0))
 
 
@@ -322,7 +339,7 @@ def data_show():    #matplotlib
     y = [1,3,4,2,5,8,6]
 
     left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
-    ax1 = figure.add_axes([left, bottom, width, height])
+    ax1 = figure.add_axes([left, bottom, width, height])    #left, bottom, width, height是百分比
     ax1.plot(x,y, 'r')
     ax1.set_xlabel('x')
     ax1.set_ylabel('y')
@@ -333,7 +350,7 @@ def data_show():    #matplotlib
     ax2.set_ylabel('y')
 
     left, bottom, width, height = 0.6, 0.2, 0.25, 0.25
-    plt.axes([left, bottom, width, height])
+    plt.axes([left, bottom, width, height]) #作用相当于figure.add_axes([left, bottom, width, height])
     plt.plot(y[::-1], x, 'b')   #y[::-1]逆序
     plt.xlabel('x')
     plt.ylabel('y')
