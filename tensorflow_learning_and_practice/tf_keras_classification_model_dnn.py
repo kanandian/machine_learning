@@ -54,8 +54,19 @@ def show_imgs(n_rows, n_cols, x_data, y_data, class_names):
 
 model = keras.models.Sequential()
 model.add(keras.layers.Flatten(input_shape=[28, 28]))
-model.add(keras.layers.Dense(300, activation='relu'))
-model.add(keras.layers.Dense(100, activation='relu'))
+for i in range(20):
+    model.add(keras.layers.Dense(100, activation='selu'))   #selu自带归一化
+    # model.add(keras.layers.BatchNormalization())    #批归一化
+    # 也可以将激活函数放在批归一化后面
+    '''
+    model.add(keras.layers.Dense(100))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Activation('relu'))
+    '''
+# model.add(keras.layers.Dropout(rate=0.5))
+# model.add(keras.layers.AlphaDropout(rate=0.5))
+# AlphaDropout特性:1.均值方差不变 2.归一化性质不变,因此可以和selu以及批归一化一起使用
+
 model.add(keras.layers.Dense(10, activation='softmax')) #将向量变成概率分布
 
 # reason for sparse: y->one_hot->向量
@@ -66,7 +77,7 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 
 # callback 回调函数
 # TensorBoard, EarlyStopping, ModelCheckpoint
-logdir = './callbacks'
+logdir = './dnn_callbacks'
 if not os.path.exists(logdir):
     os.mkdir(logdir)
 output_model_file = os.path.join(logdir, 'fashion_minst_model.h5')
@@ -88,3 +99,9 @@ def plot_learning_curves(history):
 plot_learning_curves(history)
 
 model.evaluate(x_test_scaled, y_test)
+
+# 发生的问题
+# 1.参数多，训练补充恩（欠拟合）
+# 2.梯度消失 -> 复合函数链式求导法则
+#     批归一化可以缓解梯度消失
+#     激活函数selu自带批归一化，因此也可以缓解梯度消失，且在训练时间及训练效果上都比批归一化好一点？
