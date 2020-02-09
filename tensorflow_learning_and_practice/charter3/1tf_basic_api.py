@@ -76,8 +76,8 @@ print(tf.sparse.sparse_dense_matmul(sparse_tensor, tensor4))    # sparse_tensor�
 # Variables
 v = tf.Variable([1., 2., 3.], [4., 5., 6.])
 print(v)
-print(v.value())
-print(v.numpy())
+print(v.value())    # 转成tf.constant
+print(v.numpy())    # 转成ndarray
 
 # 变量的操作和常量差不多，而且会多一些操作
 # 重新复制，是能使用assign函数，而不能使用'='
